@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases/tag/v0.1.0-dsh.0.2.1-rc.2"><img alt="0.1.0" src="https://img.shields.io/badge/release-0.1.0-0969da?style=flat-square"></a>
-  <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases/tag/v0.1.0-dsh.0.2.1-rc.2"><img alt="This package downloads, not users" src="https://img.shields.io/github/downloads/gulagala001/dsh-deepseek-workbench/v0.1.0-dsh.0.2.1-rc.2/dsh-deepseek-workbench-0.1.0-dsh.0.2.1-rc.2.tgz?style=flat-square&amp;label=package%20downloads&amp;displayAssetName=false&amp;color=0969da"></a>
+  <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases/tag/v0.1.0-dsh.0.2.1-rc.2"><img alt="Package downloads" src="https://img.shields.io/github/downloads/gulagala001/dsh-deepseek-workbench/v0.1.0-dsh.0.2.1-rc.2/dsh-deepseek-workbench-0.1.0-dsh.0.2.1-rc.2.tgz?style=flat-square&amp;label=package%20downloads&amp;displayAssetName=false&amp;color=0969da"></a>
   <a href="#readme-install"><img alt="DSH 0.2.1-rc.2" src="https://img.shields.io/badge/DSH-0.2.1--rc.2-0969da?style=flat-square"></a>
   <a href="https://github.com/gulagala001/dsh-deepseek-workbench/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/gulagala001/dsh-deepseek-workbench?style=flat-square&amp;color=0969da"></a>
 </p>
@@ -16,10 +16,6 @@
 <p align="center"><a href="#readme-install"><strong>Get started</strong></a> · <a href="docs/usage_EN.md">Docs</a> · <a href="https://github.com/gulagala001/dsh-deepseek-workbench/issues">Report an issue</a></p>
 
 <p align="center"><a href="docs/images/temporary-chat.png"><img src="docs/images/temporary-chat.png" alt="DeepSeek 临时侧栏聊天 / Temporary DeepSeek side chat" width="880"></a></p>
-
-*Actual temporary side-chat UI with synthetic conversation content.*
-
-The download badge counts only the linked release’s plugin archive; it is not a count of users or installations.
 
 <a name="readme-install"></a>
 
