@@ -1,5 +1,7 @@
 # DeepSeek Workbench — Installation and maintenance
 
+Source builds target the exact host in `package.json`, currently `0.2.1-rc.3`. Each build uses its matching SDK, components and dependency lock; choose an installation entry for the host named by the published package.
+
 [简体中文](install.md) · [README](../README_EN.md#readme-install)
 
 **DSH 0.2.1-rc.2 · Node.js ≥22.19 · 0.1.0**

@@ -1,5 +1,7 @@
 # DeepSeek Workbench — 安装与维护
 
+宿主构建以 `package.json` 的完整版本为准，当前源码默认 `0.2.1-rc.3`。每份构建对齐同版本 SDK、组件与依赖锁，安装入口按正式发行包的宿主版本选择。
+
 [English](install_EN.md) · [返回首页](../README.md#readme-install)
 
 **DSH 0.2.1-rc.2 · Node.js ≥22.19 · 0.1.0**
