@@ -219,4 +219,4 @@ Install the fixed package matching the complete DSH version through **Plugins �
 - API Platform entry in account settings and website-history migration into native DSH conversations.
 - Exact DSH 0.2.1-rc.2 / Cordis 4.0.5 compatibility; companion desktop bridge required for embedded website capabilities.
 
-[中文 / English release notes](docs/releases.md)
+[中文 / English release notes](https://github.com/gulagala001/dsh-deepseek-workbench/releases)
