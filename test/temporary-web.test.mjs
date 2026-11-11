@@ -77,3 +77,35 @@ test('the official create receipt is captured and the guest cannot create a seco
   assert.equal(receipt.id, 'new-receipt');
   await assert.rejects(controller.sessionService.createSession(), /只允许创建一个/);
 });
+
+test('ownership storage can recover without another create receipt', async () => {
+  const f = fixture(), write = f.store.setItem;
+  f.store.setItem = () => {throw Error('full');};
+  await assert.rejects(f.chat.run('send',{text:'owned'}), /full/);
+  f.store.setItem = write;
+  f.chat.observe('https://chat.deepseek.com/a/chat/s/unrelated');
+  await f.chat.capture();
+  assert.equal(JSON.parse([...f.store.data.values()][0])[0].id, 'owned');
+  await recoverTemporaryChats(f.chat.adapter, f.store);
+  assert.deepEqual(f.removed, ['owned']);
+});
+test('corrupt cleanup data remains intact and never authorizes deletion', async () => {
+  const f = fixture(), key = 'dsh-deepseek-workbench.pending-temporary.v1';
+  for (const raw of ['{','{}','[{"id":"foreign"}]']) {
+    f.store.setItem(key,raw); await assert.rejects(f.chat.run('send',{text:'x'}), /损坏/);
+    assert.equal(f.store.getItem(key),raw); assert.deepEqual(f.removed,[]);
+  }
+});
+test('successful creation with unknown ownership blocks close and cannot be replayed', async () => {
+  let calls = 0;
+  const service = {async createSession() {calls++; return {source:'unknown',session:{id:'ordinary'}};}};
+  const controller = {sessionService:service, abortCompletion(){}, createSessionAndStartCompletion(){}, deleteSession(){assert.fail();}};
+  const node = {__reactFiber$x:{memoizedProps:{value:{chatController:controller}}}};
+  const env = {window:{},location:{origin:'https://chat.deepseek.com',pathname:'/'},document:{querySelector:()=>node,querySelectorAll:()=>[]}};
+  const chat = new TemporaryWebChat({storage:storage()});
+  await runInNewContext(temporaryScript({type:'arm',token:chat.token}),env);
+  await service.createSession(); chat.armed = true;
+  chat.adapter = {extract: script => runInNewContext(script,env)};
+  await assert.rejects(chat.close(), /创建结果未知/);
+  await assert.rejects(service.createSession()); assert.equal(calls,1); assert.equal(chat.closed,false);
+});
