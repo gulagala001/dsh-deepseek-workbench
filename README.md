@@ -7,9 +7,9 @@
 <p align="center"><strong>简体中文</strong> · <a href="README_EN.md">English</a></p>
 
 <p align="center">
-  <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases/tag/v0.1.5-dsh.0.2.2-rc.1"><img alt="DeepSeek Workbench 0.1.5" src="https://img.shields.io/badge/release-0.1.5-0969da?style=flat-square"></a>
+  <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases/tag/v0.1.6-dsh.0.2.2-rc.2"><img alt="DeepSeek Workbench 0.1.6" src="https://img.shields.io/badge/release-0.1.6-0969da?style=flat-square"></a>
   <a href="https://github.com/gulagala001/dsh-deepseek-workbench/releases"><img alt="GitHub 下载量" src="https://img.shields.io/github/downloads/gulagala001/dsh-deepseek-workbench/total?style=flat-square&amp;label=GitHub%20downloads&amp;color=0969da"></a>
-  <a href="#readme-install"><img alt="DSH 0.2.2-rc.1" src="https://img.shields.io/badge/DSH-0.2.2--rc.1-0969da?style=flat-square"></a>
+  <a href="#readme-install"><img alt="DSH 0.2.2-rc.2" src="https://img.shields.io/badge/DSH-0.2.2--rc.2-0969da?style=flat-square"></a>
   <a href="https://github.com/gulagala001/dsh-deepseek-workbench/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/gulagala001/dsh-deepseek-workbench?style=flat-square&amp;color=0969da"></a>
 </p>
 
@@ -21,17 +21,17 @@
 
 ## 快速开始
 
-**需要：** DSH **0.2.2-rc.1** 桌面版，Node.js **24.9.0+**。浏览器版 DSH 只能从外部浏览器打开网页聊天。
+**需要：** DSH **0.2.2-rc.2** 桌面版，Node.js **24.9.0+**。浏览器版 DSH 只能从外部浏览器打开网页聊天。
 
 ### 1. 安装
 
 在 DSH 里打开 **插件 → ＋ 添加插件**，粘贴：
 
 ```text
-https://github.com/gulagala001/dsh-deepseek-workbench/releases/download/v0.1.5-dsh.0.2.2-rc.1/dsh-deepseek-workbench-0.1.5-dsh.0.2.2-rc.1.tgz
+https://github.com/gulagala001/dsh-deepseek-workbench/releases/download/v0.1.6-dsh.0.2.2-rc.2/dsh-deepseek-workbench-0.1.6-dsh.0.2.2-rc.2.tgz
 ```
 
-等手头的任务跑完，按提示启用或重启 DSH，原来的设置和会话都还在。命令行安装、升级和卸载见[安装指南](docs/install.md)，校验文件：[SHA256SUMS](https://github.com/gulagala001/dsh-deepseek-workbench/releases/download/v0.1.5-dsh.0.2.2-rc.1/SHA256SUMS)。
+等手头的任务跑完，按提示启用或重启 DSH，原来的设置和会话都还在。命令行安装、升级和卸载见[安装指南](docs/install.md)，校验文件：[SHA256SUMS](https://github.com/gulagala001/dsh-deepseek-workbench/releases/download/v0.1.6-dsh.0.2.2-rc.2/SHA256SUMS)。
 
 ### 2. 先试一件事
 
@@ -86,6 +86,7 @@ DSH 会新建一个会话，把这条聊天的消息和附件带过来。要不�
 安装包名是 `dsh-deepseek-workbench`，只从本仓库的 Release 下载。
 
 ```bash
+node scripts/prepare-host-sdk.mjs
 pnpm install --frozen-lockfile --ignore-scripts --config.strict-dep-builds=false
 pnpm build
 ```

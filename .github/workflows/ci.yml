@@ -16,6 +16,7 @@ jobs:
         with:
           version: '11.28.5'
           run_install: false
+      - run: node scripts/prepare-host-sdk.mjs
       - run: pnpm install --frozen-lockfile --ignore-scripts --config.strict-dep-builds=false
       - run: pnpm build
       - run: npm test
