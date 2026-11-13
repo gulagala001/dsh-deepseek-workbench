@@ -5,10 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@deepseek-ai/cordis': link:../.local/dsh-sdk-ddac9676/vendor/cordis
-  '@deepseek-ai/dsh-agent': link:../.local/dsh-sdk-ddac9676/packages/core/agent
-  '@deepseek-ai/dsh-llm': link:../.local/dsh-sdk-ddac9676/packages/llm/llm
-  '@deepseek-ai/dsh-session': link:../.local/dsh-sdk-ddac9676/packages/core/session
+  '@deepseek-ai/cordis': link:../.local/dsh-sdk-38a6a5c9/vendor/cordis
+  '@deepseek-ai/dsh-agent': link:../.local/dsh-sdk-38a6a5c9/packages/core/agent
+  '@deepseek-ai/dsh-llm': link:../.local/dsh-sdk-38a6a5c9/packages/llm/llm
+  '@deepseek-ai/dsh-session': link:../.local/dsh-sdk-38a6a5c9/packages/core/session
   '@deepseek-ai/schemastery': 3.19.0
   '@deepseek-ai/cosmokit': 1.9.0
   '@deepseek-ai/cordis-plugin-group': 1.1.0
@@ -23,17 +23,17 @@ importers:
   .:
     dependencies:
       '@deepseek-ai/cordis':
-        specifier: link:../.local/dsh-sdk-ddac9676/vendor/cordis
-        version: link:../.local/dsh-sdk-ddac9676/vendor/cordis
+        specifier: link:../.local/dsh-sdk-38a6a5c9/vendor/cordis
+        version: link:../.local/dsh-sdk-38a6a5c9/vendor/cordis
       '@deepseek-ai/dsh-agent':
-        specifier: link:../.local/dsh-sdk-ddac9676/packages/core/agent
-        version: link:../.local/dsh-sdk-ddac9676/packages/core/agent
+        specifier: link:../.local/dsh-sdk-38a6a5c9/packages/core/agent
+        version: link:../.local/dsh-sdk-38a6a5c9/packages/core/agent
       '@deepseek-ai/dsh-llm':
-        specifier: link:../.local/dsh-sdk-ddac9676/packages/llm/llm
-        version: link:../.local/dsh-sdk-ddac9676/packages/llm/llm
+        specifier: link:../.local/dsh-sdk-38a6a5c9/packages/llm/llm
+        version: link:../.local/dsh-sdk-38a6a5c9/packages/llm/llm
       '@deepseek-ai/dsh-session':
-        specifier: link:../.local/dsh-sdk-ddac9676/packages/core/session
-        version: link:../.local/dsh-sdk-ddac9676/packages/core/session
+        specifier: link:../.local/dsh-sdk-38a6a5c9/packages/core/session
+        version: link:../.local/dsh-sdk-38a6a5c9/packages/core/session
       marked:
         specifier: 18.0.12
         version: 18.0.12

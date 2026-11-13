@@ -14,10 +14,10 @@ minimumReleaseAgeExclude:
   - "@deepseek-ai/cordis-plugin-logger-console@1.1.0"
   - "@deepseek-ai/cordis-plugin-timer@1.2.0"
 overrides:
-  "@deepseek-ai/cordis": "link:../.local/dsh-sdk-ddac9676/vendor/cordis"
-  "@deepseek-ai/dsh-agent": "link:../.local/dsh-sdk-ddac9676/packages/core/agent"
-  "@deepseek-ai/dsh-llm": "link:../.local/dsh-sdk-ddac9676/packages/llm/llm"
-  "@deepseek-ai/dsh-session": "link:../.local/dsh-sdk-ddac9676/packages/core/session"
+  "@deepseek-ai/cordis": "link:../.local/dsh-sdk-38a6a5c9/vendor/cordis"
+  "@deepseek-ai/dsh-agent": "link:../.local/dsh-sdk-38a6a5c9/packages/core/agent"
+  "@deepseek-ai/dsh-llm": "link:../.local/dsh-sdk-38a6a5c9/packages/llm/llm"
+  "@deepseek-ai/dsh-session": "link:../.local/dsh-sdk-38a6a5c9/packages/core/session"
   "@deepseek-ai/schemastery": 3.19.0
   "@deepseek-ai/cosmokit": 1.9.0
   "@deepseek-ai/cordis-plugin-group": 1.1.0
