@@ -83,9 +83,14 @@ test('ownership storage can recover without another create receipt', async () =>
   f.store.setItem = () => {throw Error('full');};
   assert.equal((await f.chat.run('send',{text:'owned'})).accepted, true);
   assert.match(f.chat.error, /full/);
+  assert.match(f.chat.syncWarning, /full/);
+  assert.equal(f.chat.closeError, '', 'ownership recovery must not offer a close retry');
   f.store.setItem = write;
   f.chat.observe('https://chat.deepseek.com/a/chat/s/unrelated');
   await f.chat.capture();
+  assert.equal(f.chat.syncWarning, '');
+  f.chat.warnSync(Error('late observation failure'));
+  assert.equal(f.chat.syncWarning, '', 'a confirmed owner cannot become unconfirmed after a later observation failure');
   assert.equal(JSON.parse([...f.store.data.values()][0])[0].id, 'owned');
   await recoverTemporaryChats(f.chat.adapter, f.store);
   assert.deepEqual(f.removed, ['owned']);
