@@ -81,7 +81,8 @@ test('the official create receipt is captured and the guest cannot create a seco
 test('ownership storage can recover without another create receipt', async () => {
   const f = fixture(), write = f.store.setItem;
   f.store.setItem = () => {throw Error('full');};
-  await assert.rejects(f.chat.run('send',{text:'owned'}), /full/);
+  assert.equal((await f.chat.run('send',{text:'owned'})).accepted, true);
+  assert.match(f.chat.error, /full/);
   f.store.setItem = write;
   f.chat.observe('https://chat.deepseek.com/a/chat/s/unrelated');
   await f.chat.capture();

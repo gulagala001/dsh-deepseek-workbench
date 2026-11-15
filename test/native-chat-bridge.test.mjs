@@ -49,3 +49,9 @@ test('toggle commands confirm the requested state, remain idempotent and follow 
   assert.equal((await page.evaluate(commandScript({ type: 'think', enabled: false }))).status.think.enabled, false);
   assert.equal(page.clicks(), 2);
 });
+
+test('commands from a previous conversation fail before touching the new composer', async () => {
+  const page = pageFixture();
+  await assert.rejects(page.evaluate(commandScript({type: 'think', expectedUrl:'https://chat.deepseek.com/a/chat/s/other'})), /已经切换/);
+  assert.equal(page.clicks(), 0);
+});
