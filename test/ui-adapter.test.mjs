@@ -63,3 +63,16 @@ test('failed guest release retries without repeating local cleanup or accepting 
   pending.resolve({ text: 'old guest' });
   await rejected;
 });
+
+test('a replaced navigation cannot overwrite the current guest or its crash report',async()=>{
+  const guest=new Guest(),states=[],first=Promise.withResolvers(),last=Promise.withResolvers();
+  const browser=await createBrowserAdapter({bridge:{acquire:async()=>({lease:'one'}),release:async()=>{}},container:{append(){}},createElement:()=>guest,onState:s=>states.push(s)});
+  try{
+    guest.dispatchEvent(new Event('dom-ready'));await Promise.resolve();
+    guest.loadURL=url=>url.endsWith('/first')?first.promise:last.promise;
+    const a=browser.navigate('https://example.org/first'),b=browser.navigate('https://example.org/last');
+    first.reject(Error('old'));await assert.rejects(a,/old/);assert.equal(states.at(-1).error,'');
+    guest.dispatchEvent(new Event('render-process-gone'));
+    last.reject(Error('load'));await assert.rejects(b,/load/);assert.match(states.at(-1).error,/进程已退出/);
+  }finally{await browser.dispose();}
+});
