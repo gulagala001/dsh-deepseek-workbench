@@ -76,3 +76,14 @@ test('a replaced navigation cannot overwrite the current guest or its crash repo
     last.reject(Error('load'));await assert.rejects(b,/load/);assert.match(states.at(-1).error,/进程已退出/);
   }finally{await browser.dispose();}
 });
+
+test('window mount rollback keeps the failed resource until a confirmed handoff',async()=>{
+ const {acquireWindowOwner}=await import('../src/client/window-owner.mjs');
+ const window={},id=Symbol(),active=new Set();let fail=true;
+ const scope=()=>({effect(fn){this.release=fn();}}), first=scope(), second=scope();
+ const mount=(ctx,own)=>{active.add(ctx);own(()=>{if(ctx===first && fail)throw Error('retire');active.delete(ctx);});if(ctx===first)throw Error('start');};
+ await assert.rejects(acquireWindowOwner(first,window,id,mount),AggregateError);
+ await assert.rejects(first.release());await assert.rejects(acquireWindowOwner(second,window,id,mount));assert.deepEqual([...active],[first]);
+ fail=false;await acquireWindowOwner(second,window,id,mount);assert.deepEqual([...active],[second]);
+ await second.release();assert.equal(active.size,0);assert.equal(window[id],undefined);
+});

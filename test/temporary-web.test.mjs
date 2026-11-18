@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { runInNewContext } from 'node:vm';
 import { statusScript } from '../src/client/native-chat-bridge.mjs';
 import { TemporaryWebChat, temporaryScript, recoverTemporaryChats } from '../src/client/temporary-web.mjs';
-const storage = () => { const data = new Map(); return { getItem: key => data.get(key), setItem: (key, value) => data.set(key, value), removeItem: key => data.delete(key), data }; };
+const storage = () => { const data = new Map(); return { get length(){return data.size;}, key:i=>[...data.keys()][i], getItem: key => data.get(key), setItem: (key, value) => data.set(key, value), removeItem: key => data.delete(key), data }; };
 function fixture() {
   const store = storage(), chat = new TemporaryWebChat({ storage: store }), removed = [];
   let createdId = null; let url = 'https://chat.deepseek.com/', fail = false, wait;
@@ -48,7 +48,9 @@ test('official controller deletion must acknowledge the exact owned id', async (
 test('crash cleanup skips live owners and clears only successful recorded deletions', async () => {
   const f = fixture(); await f.chat.run('send', { text: 'synthetic' });
   await recoverTemporaryChats(f.chat.adapter, f.store, new Set([f.chat.token])); assert.deepEqual(f.removed, []);
-  await recoverTemporaryChats(f.chat.adapter, f.store); assert.deepEqual(f.removed, ['owned']); assert.equal(f.store.data.size, 0);
+  await f.chat.detachOwner();
+  const review=await recoverTemporaryChats(f.chat.adapter,f.store,new Set());
+  if(review.length)await recoverTemporaryChats(f.chat.adapter,f.store,new Set(),{confirmed:review}); assert.deepEqual(f.removed, ['owned']); assert.equal(f.store.data.size, 0);
 });
 test('an unacknowledged send followed by old-history navigation cannot acquire that history', async () => {
   const store = storage(), chat = new TemporaryWebChat({ storage: store }), deleted = [];
@@ -91,8 +93,10 @@ test('ownership storage can recover without another create receipt', async () =>
   assert.equal(f.chat.syncWarning, '');
   f.chat.warnSync(Error('late observation failure'));
   assert.equal(f.chat.syncWarning, '', 'a confirmed owner cannot become unconfirmed after a later observation failure');
-  assert.equal(JSON.parse([...f.store.data.values()][0])[0].id, 'owned');
-  await recoverTemporaryChats(f.chat.adapter, f.store);
+  assert.equal(JSON.parse([...f.store.data.values()][0]).id, 'owned');
+  await f.chat.detachOwner();
+  const review=await recoverTemporaryChats(f.chat.adapter,f.store,new Set());
+  if(review.length)await recoverTemporaryChats(f.chat.adapter,f.store,new Set(),{confirmed:review});
   assert.deepEqual(f.removed, ['owned']);
 });
 test('corrupt cleanup data remains intact and never authorizes deletion', async () => {
@@ -114,4 +118,34 @@ test('successful creation with unknown ownership blocks close and cannot be repl
   chat.adapter = {extract: script => runInNewContext(script,env)};
   await assert.rejects(chat.close(), /创建结果未知/);
   await assert.rejects(service.createSession()); assert.equal(calls,1); assert.equal(chat.closed,false);
+});
+
+test('a second window cannot recover a live chat and concurrent orphan recovery deletes once',async()=>{
+  const f=fixture();await f.chat.run('send',{text:'active'});
+  await recoverTemporaryChats(f.chat.adapter,f.store,new Set());assert.equal(f.removed.length,0);
+  await f.chat.detachOwner();
+  await Promise.all([1,2].map(()=>recoverTemporaryChats(f.chat.adapter,f.store,new Set())));
+  assert.equal(f.removed.length,1);assert.equal(f.store.data.size,0);
+});
+test('legacy cleanup requires confirming the reviewed owner and conversation',async()=>{
+  const f=fixture(), key='dsh-deepseek-workbench.pending-temporary.v1',row={id:'owned',url:'https://chat.deepseek.com/a/chat/s/owned',owner:'old-window'};
+  f.store.setItem(key,JSON.stringify([row]));
+  const review=await recoverTemporaryChats(f.chat.adapter,f.store,new Set());assert.deepEqual(review,[{...row,legacy:true}]);assert.equal(f.removed.length,0);
+  await recoverTemporaryChats(f.chat.adapter,f.store,new Set(),{confirmed:review});assert.equal(f.removed.length,1);assert.equal(f.store.data.size,0);
+});
+
+test('a crash between dispatch and the website create receipt leaves a reviewable intent, never a guessed deletion',async()=>{
+ const store=storage(),chat=new TemporaryWebChat({storage:store}),gate=Promise.withResolvers(),entered=Promise.withResolvers();
+ chat.adapter={extract:async script=>{
+   if(script===statusScript)return {url:'https://chat.deepseek.com/'};
+   if(script.includes('"type":"send"')){entered.resolve();await gate.promise;return {};}
+   if(script.includes('"type":"owned"'))return {started:true,id:null};
+   return {ready:true};
+ }};
+ const send=chat.run('send');await entered.promise;
+ assert.equal(JSON.parse([...store.data.values()][0]).phase,'creating');
+ gate.resolve();await send;await chat.detachOwner();
+ const adapter={extract:()=>assert.fail('Unidentified history must not be deleted')};
+ const review=await recoverTemporaryChats(adapter,store,new Set());assert.equal(review.length,1);
+ await recoverTemporaryChats(adapter,store,new Set(),{confirmed:review});assert.equal(store.data.size,0);
 });
